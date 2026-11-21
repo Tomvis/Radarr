@@ -180,6 +180,79 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
             trackedDownload.RemoteMovie.Release.Indexer.Should().Be("MyIndexer (Prowlarr)");
         }
 
+        // Tomvis (MEDIA-39): the Dubcheck custom format rescoring a queued download needs its release guid
+        [Test]
+        public void should_set_release_guid_from_grab_history()
+        {
+            var episodeHistory = new MovieHistory()
+            {
+                DownloadId = "35238",
+                SourceTitle = "TV Series S01",
+                MovieId = 3,
+                EventType = MovieHistoryEventType.Grabbed,
+            };
+            episodeHistory.Data.Add("indexer", "MyIndexer (Prowlarr)");
+            episodeHistory.Data.Add("guid", "https://indexer/guid/42");
+            Mocker.GetMock<IHistoryService>()
+                .Setup(s => s.FindByDownloadId(It.Is<string>(sr => sr == "35238")))
+                .Returns(new List<MovieHistory>()
+                {
+                    episodeHistory
+                });
+
+            var indexerDefinition = new IndexerDefinition
+            {
+                Id = 1,
+                Name = "MyIndexer (Prowlarr)",
+                Settings = new TorrentRssIndexerSettings { MultiLanguages = new List<int> { Language.Original.Id, Language.French.Id } }
+            };
+            Mocker.GetMock<IIndexerFactory>()
+                .Setup(v => v.Get(indexerDefinition.Id))
+                .Returns(indexerDefinition);
+            Mocker.GetMock<IIndexerFactory>()
+                .Setup(v => v.All())
+                .Returns(new List<IndexerDefinition>() { indexerDefinition });
+
+            var remoteEpisode = new RemoteMovie
+            {
+                Movie = new Movie() { Id = 3 },
+                ParsedMovieInfo = new ParsedMovieInfo()
+                {
+                    MovieTitles = new List<string> { "A Movie" },
+                    Year = 1998
+                }
+            };
+
+            Mocker.GetMock<IParsingService>()
+                .Setup(s => s.Map(It.IsAny<ParsedMovieInfo>(), It.IsAny<string>(), It.IsAny<int>(), null))
+                .Returns(remoteEpisode);
+
+            var client = new DownloadClientDefinition()
+            {
+                Id = 1,
+                Protocol = DownloadProtocol.Torrent
+            };
+
+            var item = new DownloadClientItem()
+            {
+                Title = "A Movie 1998",
+                DownloadId = "35238",
+                DownloadClientInfo = new DownloadClientItemClientInfo
+                {
+                    Protocol = client.Protocol,
+                    Id = client.Id,
+                    Name = client.Name
+                }
+            };
+
+            var trackedDownload = Subject.TrackDownload(client, item);
+
+            trackedDownload.Should().NotBeNull();
+            trackedDownload.RemoteMovie.Should().NotBeNull();
+            trackedDownload.RemoteMovie.Release.Should().NotBeNull();
+            trackedDownload.RemoteMovie.Release.Guid.Should().Be("https://indexer/guid/42");
+        }
+
         [Test]
         public void should_unmap_tracked_download_if_movie_deleted()
         {

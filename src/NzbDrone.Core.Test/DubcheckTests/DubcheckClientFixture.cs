@@ -82,6 +82,71 @@ namespace NzbDrone.Core.Test.DubcheckTests
             body.Should().Contain("\"profile\":\"Hebrew\"").And.Contain("\"language\":\"Hebrew\"").And.Contain("\"description\":\"d\"").And.Contain("Animation");
         }
 
+        private string SentBody()
+        {
+            Mocker.GetMock<IHttpClient>().Verify(c => c.Execute(It.IsAny<HttpRequest>()), Times.AtLeastOnce());
+            var invocations = Mocker.GetMock<IHttpClient>().Invocations;
+            var sent = (HttpRequest)invocations[invocations.Count - 1].Arguments[0];
+            return System.Text.Encoding.UTF8.GetString(sent.ContentData);
+        }
+
+        [Test]
+        public void should_not_send_null_fields()
+        {
+            GivenResponse("{\"verdict\":\"has\"}");
+            var release = new ReleaseInfo { Guid = "g1", Title = "Frozen.2013.1080p", DownloadUrl = "http://prowlarr/dl/1" };
+
+            Subject.Check(release, _movie, Language.Hebrew);
+
+            SentBody().Should().NotContain("null");
+        }
+
+        [Test]
+        public void should_not_cache_unknown()
+        {
+            GivenResponse("{\"verdict\":\"unknown\"}");
+
+            Subject.Check(Release(), _movie, Language.Hebrew);
+            Subject.Check(Release(), _movie, Language.Hebrew);
+
+            Mocker.GetMock<IHttpClient>().Verify(c => c.Execute(It.IsAny<HttpRequest>()), Times.Exactly(2));
+        }
+
+        [Test]
+        public void should_check_cache_only_after_prefetch()
+        {
+            GivenResponse("{\"verdict\":\"unknown\",\"checked\":1,\"pending\":0}");
+            var release = Release("p1");
+            release.DownloadUrl = "http://prowlarr/dl/p1";
+
+            Subject.Prefetch(new List<ReleaseInfo> { release }, new MovieSearchCriteria { Movie = _movie });
+            Subject.Check(release, _movie, Language.Hebrew);
+
+            SentBody().Should().Contain("\"cacheOnly\":true");
+        }
+
+        [Test]
+        public void should_check_cache_only_without_download_url()
+        {
+            GivenResponse("{\"verdict\":\"unknown\"}");
+
+            Subject.Check(new ReleaseInfo { Guid = "q1", Title = "Frozen.2013.1080p" }, _movie, Language.Hebrew);
+
+            SentBody().Should().Contain("\"cacheOnly\":true");
+        }
+
+        [Test]
+        public void should_do_full_check_for_unprefetched_release()
+        {
+            GivenResponse("{\"verdict\":\"unknown\"}");
+            var release = Release("r1");
+            release.DownloadUrl = "http://prowlarr/dl/r1";
+
+            Subject.Check(release, _movie, Language.Hebrew);
+
+            SentBody().Should().Contain("\"cacheOnly\":false");
+        }
+
         [Test]
         public void should_cache_per_guid_and_language()
         {

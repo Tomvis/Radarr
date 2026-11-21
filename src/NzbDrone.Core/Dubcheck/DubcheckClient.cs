@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -33,13 +34,19 @@ namespace NzbDrone.Core.Dubcheck
         private static readonly TimeSpan CacheFor = TimeSpan.FromHours(1);
         private static readonly TimeSpan BreakerOpenFor = TimeSpan.FromMinutes(5);
 
-        private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, PropertyNameCaseInsensitive = true };
+        private static readonly JsonSerializerOptions JsonOptions = new()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            PropertyNameCaseInsensitive = true,
+            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+        };
 
         private readonly IHttpClient _httpClient;
         private readonly IQualityProfileService _qualityProfileService;
         private readonly Logger _logger;
         private readonly string _url;
         private readonly ConcurrentDictionary<(string, int), (DubVerdict Verdict, DateTime At)> _cache = new();
+        private readonly ConcurrentDictionary<string, DateTime> _prefetched = new();
         private readonly object _breakerLock = new();
         private int _failures;
         private DateTime _openUntil = DateTime.MinValue;
@@ -79,12 +86,18 @@ namespace NzbDrone.Core.Dubcheck
                 return hit.Verdict;
             }
 
+            // Cache only (no slow signals): a prefetched release (dubcheck already worked on it) or a release
+            // Radarr rebuilt from history for the queue (no download URL): answer from dubcheck's cache.
+            var cacheOnly = release.DownloadUrl.IsNullOrWhiteSpace() ||
+                            (_prefetched.TryGetValue(release.Guid, out var at) && DateTime.UtcNow - at < CacheFor);
+
             var body = new
             {
                 release = ReleaseBody(release),
                 movie = MovieBody(movie),
                 profile = profile.Name,
-                language = language.Name
+                language = language.Name,
+                cacheOnly
             };
 
             var response = Post("/v1/check", body, CheckTimeout);
@@ -101,7 +114,11 @@ namespace NzbDrone.Core.Dubcheck
                 _ => DubVerdict.Unknown
             };
 
-            _cache[key] = (verdict, DateTime.UtcNow);
+            // Unknown is not kept: a prefetch still running can turn it into a verdict on the next pass
+            if (verdict != DubVerdict.Unknown)
+            {
+                _cache[key] = (verdict, DateTime.UtcNow);
+            }
 
             return verdict;
         }
@@ -122,7 +139,8 @@ namespace NzbDrone.Core.Dubcheck
                 return;
             }
 
-            var list = releases.Where(r => r?.Guid != null).Select(ReleaseBody).ToList();
+            var batch = releases.Where(r => r?.Guid != null).ToList();
+            var list = batch.Select(ReleaseBody).ToList();
 
             foreach (var language in WantedLanguages(profile))
             {
@@ -130,6 +148,18 @@ namespace NzbDrone.Core.Dubcheck
                 var response = Post("/v1/prefetch", body, PrefetchTimeout);
 
                 _logger.Debug("Dubcheck prefetch {0} ({1}): {2}", movie.Title, language.Name, response ?? "failed");
+            }
+
+            var now = DateTime.UtcNow;
+
+            foreach (var r in batch)
+            {
+                _prefetched[r.Guid] = now;
+            }
+
+            foreach (var old in _prefetched.Where(p => now - p.Value > CacheFor).Select(p => p.Key).ToList())
+            {
+                _prefetched.TryRemove(old, out _);
             }
         }
 

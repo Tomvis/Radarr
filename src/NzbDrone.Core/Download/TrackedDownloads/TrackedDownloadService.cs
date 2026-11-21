@@ -164,6 +164,9 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                         trackedDownload.RemoteMovie.Release.Indexer = trackedDownload.Indexer;
                         trackedDownload.RemoteMovie.Release.Title = trackedDownload.RemoteMovie.ParsedMovieInfo?.ReleaseTitle;
 
+                        // Tomvis (MEDIA-39): the Dubcheck custom format answers per release guid
+                        trackedDownload.RemoteMovie.Release.Guid ??= grabbedEvent?.Data?.GetValueOrDefault("guid");
+
                         if (Enum.TryParse(grabbedEvent?.Data?.GetValueOrDefault("indexerFlags"), true, out IndexerFlags flags))
                         {
                             trackedDownload.RemoteMovie.Release.IndexerFlags = flags;
