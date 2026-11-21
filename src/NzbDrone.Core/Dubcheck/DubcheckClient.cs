@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Dubcheck
         private static readonly TimeSpan PrefetchTimeout = TimeSpan.FromSeconds(45);
         private static readonly TimeSpan CacheFor = TimeSpan.FromHours(1);
         private static readonly TimeSpan BreakerOpenFor = TimeSpan.FromMinutes(5);
+        private static readonly TimeSpan ProfileCacheFor = TimeSpan.FromMinutes(1);
 
         private static readonly JsonSerializerOptions JsonOptions = new()
         {
@@ -47,6 +48,7 @@ namespace NzbDrone.Core.Dubcheck
         private readonly string _url;
         private readonly ConcurrentDictionary<(string, int), (DubVerdict Verdict, DateTime At)> _cache = new();
         private readonly ConcurrentDictionary<string, DateTime> _prefetched = new();
+        private readonly ConcurrentDictionary<int, (QualityProfile Profile, DateTime At)> _profiles = new();
         private readonly object _breakerLock = new();
         private int _failures;
         private DateTime _openUntil = DateTime.MinValue;
@@ -163,17 +165,36 @@ namespace NzbDrone.Core.Dubcheck
             }
         }
 
+        // The service's profile, not movie.QualityProfile: MovieRepository joins the profile without its
+        // custom formats' specifications, so the joined one never shows a Dubcheck condition.
         private QualityProfile GetProfile(Movie movie)
         {
+            var id = movie.QualityProfileId;
+
+            if (_profiles.TryGetValue(id, out var hit) && DateTime.UtcNow - hit.At < ProfileCacheFor)
+            {
+                return hit.Profile;
+            }
+
+            QualityProfile profile = null;
+
             try
             {
-                return movie.QualityProfile ?? _qualityProfileService.Get(movie.QualityProfileId);
+                profile = _qualityProfileService.Get(id);
             }
             catch (Exception e)
             {
-                _logger.Debug(e, "Dubcheck: no profile for {0}", movie.Title);
-                return null;
+                _logger.Debug(e, "Dubcheck: no profile {0} for {1}", id, movie.Title);
             }
+
+            profile ??= movie.QualityProfile;
+
+            if (profile != null)
+            {
+                _profiles[id] = (profile, DateTime.UtcNow);
+            }
+
+            return profile;
         }
 
         // Languages of the Dubcheck conditions this profile gives a non-zero score.

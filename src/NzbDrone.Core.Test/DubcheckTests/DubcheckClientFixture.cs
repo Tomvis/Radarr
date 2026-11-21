@@ -227,6 +227,23 @@ namespace NzbDrone.Core.Test.DubcheckTests
         }
 
         [Test]
+        public void should_use_hydrated_profile_not_the_joined_one()
+        {
+            // MovieRepository joins QualityProfile without its custom formats' specifications
+            GivenResponse("{\"verdict\":\"has\"}");
+            _movie.QualityProfileId = 11;
+            _movie.QualityProfile = new QualityProfile
+            {
+                Id = 11,
+                Name = "Hebrew",
+                FormatItems = new List<ProfileFormatItem> { new ProfileFormatItem { Format = new CustomFormat { Id = 5 }, Score = 20000 } }
+            };
+            Mocker.GetMock<IQualityProfileService>().Setup(s => s.Get(11)).Returns(DubProfile("Hebrew", 20000));
+
+            Subject.Check(Release(), _movie, Language.Hebrew).Should().Be(DubVerdict.Has);
+        }
+
+        [Test]
         public void should_not_prefetch_without_search()
         {
             Subject.Prefetch(new List<ReleaseInfo> { Release("a") }, null);
