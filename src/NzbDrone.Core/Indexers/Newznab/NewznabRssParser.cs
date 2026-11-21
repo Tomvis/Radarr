@@ -95,6 +95,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             releaseInfo.TmdbId = GetTmdbId(item);
             releaseInfo.ImdbId = GetImdbId(item);
             releaseInfo.IndexerFlags = GetFlags(item);
+            releaseInfo.IndexerAttributes = GetIndexerAttributes(item, ns);
 
             return releaseInfo;
         }

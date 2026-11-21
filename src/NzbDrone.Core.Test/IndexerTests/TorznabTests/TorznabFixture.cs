@@ -74,6 +74,25 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
         }
 
         [Test]
+        public async Task should_keep_description_and_attrs()
+        {
+            var recentFeed = ReadAllText(@"Files/Indexers/Torznab/torznab_rutracker.xml");
+
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.ExecuteAsync(It.Is<HttpRequest>(v => v.Method == HttpMethod.Get)))
+                .Returns<HttpRequest>(r => Task.FromResult(new HttpResponse(r, new HttpHeader(), recentFeed)));
+
+            var releases = await Subject.FetchRecent();
+
+            releases.Should().HaveCount(2);
+            var releaseInfo = releases.First();
+            releaseInfo.Description.Should().StartWith("Моана / Moana");
+            releaseInfo.Description.Should().Contain("Dub (Невафильм) + Dub (Kaz) + Original (Eng)");
+            releaseInfo.IndexerAttributes["grabs"].Should().Be("33971");
+            releaseInfo.IndexerAttributes["category"].Should().Be("2040");
+        }
+
+        [Test]
         public async Task should_parse_recent_feed_from_torznab_tpb()
         {
             var recentFeed = ReadAllText(@"Files/Indexers/Torznab/torznab_tpb.xml");

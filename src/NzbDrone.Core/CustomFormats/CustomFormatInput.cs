@@ -14,6 +14,9 @@ namespace NzbDrone.Core.CustomFormats
         public List<Language> Languages { get; set; }
         public string Filename { get; set; }
 
+        // Tomvis (MEDIA-39): the release being scored; null for files, history and blocklist items
+        public ReleaseInfo Release { get; set; }
+
         public CustomFormatInput()
         {
             Languages = new List<Language>();

@@ -37,6 +37,10 @@ namespace NzbDrone.Core.Parser.Model
 
         public List<Language> Languages { get; set; }
 
+        // Tomvis (MEDIA-39): the indexer's <description> and every torznab/newznab attr, for dubcheck
+        public string Description { get; set; }
+        public Dictionary<string, string> IndexerAttributes { get; set; }
+
         [JsonIgnore]
         public IndexerFlags IndexerFlags { get; set; }
 

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="1.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:torznab="http://torznab.com/schemas/2015/feed">
+  <channel>
+    <atom:link rel="self" type="application/rss+xml" />
+    <title>Prowlarr</title>
+    <item>
+      <title>Моана / Moana [2016, США, мультфильм, мюзикл, фэнтези, комедия, приключения, семейный, WEB-DL 1080p] [Локализованный видеоряд] Dub + Dub (Kaz) + Original (Eng) + ) RUS</title>
+      <description>Моана / Moana (Рон Клементс / Ron Clements, Дон Холл / Don Hall, Джон Маскер / John Musker) [2016, США, мультфильм, мюзикл, фэнтези, комедия, приключения, семейный, WEB-DL 1080p] [Локализованный видеоряд] Dub (Невафильм) + Dub (Kaz) + Original (Eng) + Sub (Rus, Eng)</description>
+      <guid>https://rutracker.org/forum/viewtopic.php?t=6281573</guid>
+      <prowlarrindexer id="133" type="semi-private">RuTracker</prowlarrindexer>
+      <comments>https://rutracker.org/forum/viewtopic.php?t=6281573</comments>
+      <pubDate>Wed, 09 Nov 2022 19:00:26 +0200</pubDate>
+      <size>4474894749</size>
+      <link>http://localhost/133/download?apikey=eb8ec2b8f5c8432b8c1797f44875007a&amp;link=QjcwWEpQMXRMY3IxTm5rbks0MGVjZWxZWXJOVWxjYVZmcGMyOEJUSm95MmR1UktCTHVJS3VkWFlCK1huMTFQdGJsLy8xTjFMckZqcmJIQ2xOSlhBUnRGS0NPcFZPNHRaeFphS2ZLOGtqcE09&amp;file=%D0%9C%D0%BE%D0%B0%D0%BD%D0%B0+%2F+Moana+%5B2016%2C+%D0%A1%D0%A8%D0%90%2C+%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%2C+%D0%BC%D1%8E%D0%B7%D0%B8%D0%BA%D0%BB%2C+%D1%84%D1%8D%D0%BD%D1%82%D0%B5%D0%B7%D0%B8%2C+%D0%BA%D0%BE%D0%BC%D0%B5%D0%B4%D0%B8%D1%8F%2C+%D0%BF%D1%80%D0%B8%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%2C+%D1%81%D0%B5%D0%BC%D0%B5%D0%B9%D0%BD%D1%8B%D0%B9%2C+WEB-DL+1080p%5D+%5B%D0%9B%D0%BE%D0%BA%D0%B0%D0%BB%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B9+%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE%D1%80%D1%8F%D0%B4%5D+Dub+%2B+Dub+(Kaz)+%2B+Original+(Eng)+%2B+)+RUS</link>
+      <category>2040</category>
+      <category>100930</category>
+      <enclosure url="http://localhost/133/download?apikey=eb8ec2b8f5c8432b8c1797f44875007a&amp;link=QjcwWEpQMXRMY3IxTm5rbks0MGVjZWxZWXJOVWxjYVZmcGMyOEJUSm95MmR1UktCTHVJS3VkWFlCK1huMTFQdGJsLy8xTjFMckZqcmJIQ2xOSlhBUnRGS0NPcFZPNHRaeFphS2ZLOGtqcE09&amp;file=%D0%9C%D0%BE%D0%B0%D0%BD%D0%B0+%2F+Moana+%5B2016%2C+%D0%A1%D0%A8%D0%90%2C+%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%2C+%D0%BC%D1%8E%D0%B7%D0%B8%D0%BA%D0%BB%2C+%D1%84%D1%8D%D0%BD%D1%82%D0%B5%D0%B7%D0%B8%2C+%D0%BA%D0%BE%D0%BC%D0%B5%D0%B4%D0%B8%D1%8F%2C+%D0%BF%D1%80%D0%B8%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%2C+%D1%81%D0%B5%D0%BC%D0%B5%D0%B9%D0%BD%D1%8B%D0%B9%2C+WEB-DL+1080p%5D+%5B%D0%9B%D0%BE%D0%BA%D0%B0%D0%BB%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B9+%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE%D1%80%D1%8F%D0%B4%5D+Dub+%2B+Dub+(Kaz)+%2B+Original+(Eng)+%2B+)+RUS" length="4474894749" type="application/x-bittorrent" />
+      <torznab:attr name="category" value="2040" />
+      <torznab:attr name="category" value="100930" />
+      <torznab:attr name="genre" value="" />
+      <torznab:attr name="seeders" value="287" />
+      <torznab:attr name="grabs" value="33971" />
+      <torznab:attr name="peers" value="305" />
+      <torznab:attr name="minimumratio" value="1" />
+      <torznab:attr name="minimumseedtime" value="0" />
+      <torznab:attr name="downloadvolumefactor" value="1" />
+      <torznab:attr name="uploadvolumefactor" value="1" />
+    </item>
+<item>
+      <title>Моана / Moana [2016, США, мультфильм, мюзикл, фэнтези, комедия, приключения, семейный, UHD BDRemux 2160p, HDR10, Dolby Vision] [Hybrid] Dub + 2x AVO + Dub (Ukr) + Original (Eng) + ) RUS</title>
+      <description>Моана / Moana (Рон Клементс, Джон Маскер, Дон Холл / Ron Clements, John Musker, Don Hall) [2016, США, мультфильм, мюзикл, фэнтези, комедия, приключения, семейный, UHD BDRemux 2160p, HDR10, Dolby Vision] [Hybrid] Dub + 2x AVO + Dub (Ukr) + Original (Eng) + Sub (Rus, Ukr, Eng)</description>
+      <guid>https://rutracker.org/forum/viewtopic.php?t=6196493</guid>
+      <prowlarrindexer id="133" type="semi-private">RuTracker</prowlarrindexer>
+      <comments>https://rutracker.org/forum/viewtopic.php?t=6196493</comments>
+      <pubDate>Tue, 29 Mar 2022 15:35:29 +0300</pubDate>
+      <size>60674931157</size>
+      <link>http://localhost/133/download?apikey=eb8ec2b8f5c8432b8c1797f44875007a&amp;link=YTBDUzJLcWpOWWJHT0FzNnhnTnpuS1RZejRFMVhhMll4bUxCQnUrSUJDZjZJWWhVTUdGdTFRb0FkY2VoR0JFTzhoaU5rb2pRVDNlZVo5THlqZDNPVkk0aDVMKzYraGZQR3Z4aDd6bXRRcWc9&amp;file=%D0%9C%D0%BE%D0%B0%D0%BD%D0%B0+%2F+Moana+%5B2016%2C+%D0%A1%D0%A8%D0%90%2C+%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%2C+%D0%BC%D1%8E%D0%B7%D0%B8%D0%BA%D0%BB%2C+%D1%84%D1%8D%D0%BD%D1%82%D0%B5%D0%B7%D0%B8%2C+%D0%BA%D0%BE%D0%BC%D0%B5%D0%B4%D0%B8%D1%8F%2C+%D0%BF%D1%80%D0%B8%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%2C+%D1%81%D0%B5%D0%BC%D0%B5%D0%B9%D0%BD%D1%8B%D0%B9%2C+UHD+BDRemux+2160p%2C+HDR10%2C+Dolby+Vision%5D+%5BHybrid%5D+Dub+%2B+2x+AVO+%2B+Dub+(Ukr)+%2B+Original+(Eng)+%2B+)+RUS</link>
+      <category>2045</category>
+      <category>100084</category>
+      <enclosure url="http://localhost/133/download?apikey=eb8ec2b8f5c8432b8c1797f44875007a&amp;link=YTBDUzJLcWpOWWJHT0FzNnhnTnpuS1RZejRFMVhhMll4bUxCQnUrSUJDZjZJWWhVTUdGdTFRb0FkY2VoR0JFTzhoaU5rb2pRVDNlZVo5THlqZDNPVkk0aDVMKzYraGZQR3Z4aDd6bXRRcWc9&amp;file=%D0%9C%D0%BE%D0%B0%D0%BD%D0%B0+%2F+Moana+%5B2016%2C+%D0%A1%D0%A8%D0%90%2C+%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%2C+%D0%BC%D1%8E%D0%B7%D0%B8%D0%BA%D0%BB%2C+%D1%84%D1%8D%D0%BD%D1%82%D0%B5%D0%B7%D0%B8%2C+%D0%BA%D0%BE%D0%BC%D0%B5%D0%B4%D0%B8%D1%8F%2C+%D0%BF%D1%80%D0%B8%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%2C+%D1%81%D0%B5%D0%BC%D0%B5%D0%B9%D0%BD%D1%8B%D0%B9%2C+UHD+BDRemux+2160p%2C+HDR10%2C+Dolby+Vision%5D+%5BHybrid%5D+Dub+%2B+2x+AVO+%2B+Dub+(Ukr)+%2B+Original+(Eng)+%2B+)+RUS" length="60674931157" type="application/x-bittorrent" />
+      <torznab:attr name="category" value="2045" />
+      <torznab:attr name="category" value="100084" />
+      <torznab:attr name="genre" value="" />
+      <torznab:attr name="seeders" value="91" />
+      <torznab:attr name="grabs" value="9004" />
+      <torznab:attr name="peers" value="100" />
+      <torznab:attr name="minimumratio" value="1" />
+      <torznab:attr name="minimumseedtime" value="0" />
+      <torznab:attr name="downloadvolumefactor" value="1" />
+      <torznab:attr name="uploadvolumefactor" value="1" />
+    </item>
+  </channel>
+</rss>

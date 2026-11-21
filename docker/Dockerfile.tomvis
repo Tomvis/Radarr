@@ -1,0 +1,20 @@
+# Tomvis/Radarr image (MEDIA-39): linuxserver's Radarr of the same version with this fork's backend
+# overlaid (the UI is upstream's: it renders the Dubcheck condition from the API schema).
+# Build from `git archive enhanced` on .120. RADARR_BASE = linuxserver tag of the merged upstream version.
+ARG RADARR_BASE=7.0.3.10918-ls328
+
+FROM mcr.microsoft.com/dotnet/sdk:10.0.404 AS build
+ARG RADARR_BASE
+WORKDIR /src
+COPY . .
+RUN --mount=type=cache,target=/root/.nuget/packages \
+    rm -rf _temp _output _tests \
+    && RADARRVERSION=${RADARR_BASE%%-ls*} BUILD_SOURCEBRANCHNAME=master NuGetAudit=false \
+        ./build.sh --backend -r linux-musl-x64 -f net10.0 \
+    && cd _output/net10.0/linux-musl-x64/publish \
+    && rm -f Radarr.Windows.* ServiceInstall.* ServiceUninstall.*
+
+FROM linuxserver/radarr:${RADARR_BASE}
+ARG FORK_SHA=unknown
+COPY --from=build /src/_output/net10.0/linux-musl-x64/publish/ /app/radarr/bin/
+RUN sed -i "s/^PackageVersion=.*/PackageVersion=tomvis-${FORK_SHA}/" /app/radarr/package_info

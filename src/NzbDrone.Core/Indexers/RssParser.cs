@@ -163,6 +163,7 @@ namespace NzbDrone.Core.Indexers
             releaseInfo.InfoUrl = GetInfoUrl(item);
             releaseInfo.CommentUrl = GetCommentUrl(item);
             releaseInfo.Languages = GetLanguages(item);
+            releaseInfo.Description = GetDescription(item);
 
             try
             {
@@ -174,6 +175,31 @@ namespace NzbDrone.Core.Indexers
             }
 
             return releaseInfo;
+        }
+
+        protected virtual string GetDescription(XElement item)
+        {
+            var description = item.TryGetValue("description");
+
+            return description.IsNullOrWhiteSpace() ? null : description.Length > 4000 ? description.Substring(0, 4000) : description;
+        }
+
+        protected static Dictionary<string, string> GetIndexerAttributes(XElement item, string ns)
+        {
+            var attributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var attr in item.Elements(ns + "attr"))
+            {
+                var name = attr.Attribute("name")?.Value;
+                var value = attr.Attribute("value")?.Value;
+
+                if (name != null && value != null)
+                {
+                    attributes.TryAdd(name, value);
+                }
+            }
+
+            return attributes;
         }
 
         protected virtual ReleaseInfo PostProcessItem(XElement item, ReleaseInfo releaseInfo)

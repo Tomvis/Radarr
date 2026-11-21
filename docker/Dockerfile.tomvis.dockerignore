@@ -1,0 +1,10 @@
+.git
+node_modules
+_output
+_tests
+_temp
+**/obj
+**/bin
+build.log
+test.log
+.inner.sh

@@ -8,6 +8,7 @@ using NzbDrone.Common.Serializer;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download.Aggregation;
+using NzbDrone.Core.Dubcheck;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -26,18 +27,21 @@ namespace NzbDrone.Core.DecisionEngine
         private readonly IParsingService _parsingService;
         private readonly ICustomFormatCalculationService _formatCalculator;
         private readonly IRemoteMovieAggregationService _aggregationService;
+        private readonly IDubcheckClient _dubcheck;
         private readonly Logger _logger;
 
         public DownloadDecisionMaker(IEnumerable<IDownloadDecisionEngineSpecification> specifications,
                                      IParsingService parsingService,
                                      ICustomFormatCalculationService formatCalculator,
                                      IRemoteMovieAggregationService aggregationService,
+                                     IDubcheckClient dubcheck,
                                      Logger logger)
         {
             _specifications = specifications;
             _parsingService = parsingService;
             _formatCalculator = formatCalculator;
             _aggregationService = aggregationService;
+            _dubcheck = dubcheck;
             _logger = logger;
         }
 
@@ -60,6 +64,12 @@ namespace NzbDrone.Core.DecisionEngine
             else
             {
                 _logger.ProgressInfo("No results found");
+            }
+
+            // Tomvis (MEDIA-39): one batch call so the Dubcheck custom format answers from cache below
+            if (searchCriteria?.Movie != null && reports.Any())
+            {
+                _dubcheck.Prefetch(reports, searchCriteria);
             }
 
             var reportNumber = 1;

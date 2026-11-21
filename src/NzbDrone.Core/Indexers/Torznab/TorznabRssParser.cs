@@ -65,6 +65,7 @@ namespace NzbDrone.Core.Indexers.Torznab
                 torrentInfo.TmdbId = GetTmdbId(item);
                 torrentInfo.ImdbId = GetImdbId(item);
                 torrentInfo.IndexerFlags = GetFlags(item);
+                torrentInfo.IndexerAttributes = GetIndexerAttributes(item, ns);
             }
 
             return torrentInfo;
