@@ -17,4 +17,7 @@ RUN --mount=type=cache,target=/root/.nuget/packages \
 FROM linuxserver/radarr:${RADARR_BASE}
 ARG FORK_SHA=unknown
 COPY --from=build /src/_output/net10.0/linux-musl-x64/publish/ /app/radarr/bin/
-RUN sed -i "s/^PackageVersion=.*/PackageVersion=tomvis-${FORK_SHA}/" /app/radarr/package_info
+# The build stage's files are root-owned 0744 (its ffprobe too): Radarr runs as abc, so without this it
+# can't run ffprobe and every import stalls on "Unable to determine if file is a sample" (MEDIA-39).
+RUN chmod -R a+rX /app/radarr/bin \
+    && sed -i "s/^PackageVersion=.*/PackageVersion=tomvis-${FORK_SHA}/" /app/radarr/package_info
